@@ -2,7 +2,7 @@
   <img height="250" src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHRqNnRxNGdiaDNlMGZlaTdkZnJna3E2Z2JhN2hncTZwbTI5NXk1NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W3klTgJuKy5vymEoe7/giphy.gif" />
   
   #  About Me:
-Hello I am Mubbashirul — No formal education in coding at all, just a 24 year old amateur full stack Developer using the MERN stack along with Flutter and cybersecurity. Despite the fact that I have no college degree and no prior work experience, I have been able to gain valuable knowledge and skills in my fields of interest through personal study.
+Hello I am Mubbashirul — No formal education in coding at all, just a 24 year old amateur Full Stack Developer using the MERN stack along with Flutter and Cybersecurity. Despite the fact that I have no college degree and no prior work experience, I have been able to gain valuable knowledge and skills in my fields of interest through personal study.
 
 In terms of performance, I am very proficient in fixing any PC that runs slower than a new PC, getting the best out of any PC. IT Support is one particular profession in which my passion is strongly supported by the knowledge of recent technologies and experience in hardware and software adjustment. I shall ensure that I utilize my skills in a manner that shall ensure that I hugely benefit in advancing innovative projects.
   
