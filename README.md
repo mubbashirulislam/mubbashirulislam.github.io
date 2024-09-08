@@ -18,7 +18,8 @@ Hi, I'm Mubbashirul — a self-taught tech enthusiast with a passion for Full-St
   <img src="https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white" alt="Notion"/>
   <img src="https://img.shields.io/badge/linux-%23000000.svg?style=for-the-badge&logo=linux&logoColor=white" alt="Linux"/>
   <img src="https://img.shields.io/badge/Kali_Linux-%23black.svg?style=for-the-badge&logo=kali-linux&logoColor=white" alt="Kali Linux"/>
-
+  <img src="https://img.shields.io/badge/VisualStudioCode-%23007ACC.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white" alt="VSCode"/>
+  <img src="https://img.shields.io/badge/git-%23F05032.svg?style=for-the-badge&logo=git&logoColor=white" alt="Git"/>
 
   <br/><br/>
   <img src="https://github-readme-streak-stats.herokuapp.com/?user=mubbashirulislam&theme=dark&hide_border=false" alt="GitHub Streak"/>
