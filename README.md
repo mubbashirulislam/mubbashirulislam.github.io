@@ -27,7 +27,8 @@ Hi, I'm Mubbashirul — a self-taught tech enthusiast with a passion for Full-St
   <img src="https://img.shields.io/badge/tor-%237E4798.svg?style=for-the-badge&logo=tor-project&logoColor=white" alt="TOR"/>
   
   
-
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=mubbashirulislam&theme=dark&hide_border=false&include_all_commits=true&count_private=true&layout=compact" alt="Top Languages"/>
+  
   ## 🌐 Socials:
   <a href="https://linkedin.com/in/mubbashirul-islam"><img src="https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white" alt="LinkedIn"/></a>
   <a href="https://facebook.com/itsfisshyinstit"><img src="https://img.shields.io/badge/Facebook-%231877F2.svg?logo=Facebook&logoColor=white" alt="Facebook"/></a>
