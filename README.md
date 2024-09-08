@@ -2,7 +2,7 @@
   <img height="250" src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHRqNnRxNGdiaDNlMGZlaTdkZnJna3E2Z2JhN2hncTZwbTI5NXk1NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W3klTgJuKy5vymEoe7/giphy.gif" />
   
   #  About Me:
-Hello I am Mubbashirul — No formal education in coding at all, just a 24 year old amateur Full Stack Developer using the MERN stack along with Flutter and Cybersecurity. Despite the fact that I have no college degree and no prior work experience, I have been able to gain valuable knowledge and skills in my fields of interest through personal study.
+Hello I am Mubbashirul — No formal education in coding at all, just a 24 year old amateur Full Stack Developer using the MERN stack along with Flutter and Cybersecurity. Despite the fact that I have no college degree and no prior work experience, I have been able to gain valuable knowledge and skills in my fields of interest through personal study and self-learning.
 
   
   # 💻 Tech Stack:
