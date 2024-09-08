@@ -2,7 +2,7 @@
   <img height="250" src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHRqNnRxNGdiaDNlMGZlaTdkZnJna3E2Z2JhN2hncTZwbTI5NXk1NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W3klTgJuKy5vymEoe7/giphy.gif" />
   
   #  About Me:
-Hi, I'm Mubbashirul Islam — a self-taught tech enthusiast with a passion for Full-Stack Development (MERN stack), Flutter, and Cybersecurity. I’m on a constant journey of learning and improving, driven by curiosity and the thrill of solving problems. From optimizing potato PCs to run at peak performance (yes, I’ve managed to run games on them) to diving into CTF challenges, I love pushing tech boundaries.
+Hi, I'm Mubbashirul — a self-taught tech enthusiast with a passion for Full-Stack Development (MERN stack), Flutter, and Cybersecurity. I’m on a constant journey of learning and improving, driven by curiosity and the thrill of solving problems. From optimizing potato PCs to run at peak performance (yes, I’ve managed to run games on them) to diving into CTF challenges, I love pushing tech boundaries.
   
   ## 🌐 Socials:
   <a href="https://linkedin.com/in/mubbashirul-islam"><img src="https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white" alt="LinkedIn"/></a>
