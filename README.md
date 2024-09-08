@@ -3,7 +3,7 @@
 </div>
 
 #  About Me:
-Aspiring Full-Stack Developer | Flutter Learner | Cybersecurity Explorer<br><br><br>Diving deep into the MERN stack and Flutter, I'm constantly pushing my boundaries to build sleek, secure, and scalable applications. With an eye on cybersecurity, I’m not just focused on creating but doing so safely. Always learning, always improving, and always up for a challenge. Let’s build something awesome together.
+Hi, I'm Mubbashirul Islam — a self-taught tech enthusiast with a passion for Full-Stack Development (MERN stack), Flutter, and Cybersecurity. I’m on a constant journey of learning and improving, driven by curiosity and the thrill of solving problems. From optimizing potato PCs to run at peak performance (yes, I’ve managed to run games on them) to diving into CTF challenges, I love pushing tech boundaries. 
 
 
 
