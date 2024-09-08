@@ -27,7 +27,7 @@ Hi, I'm Mubbashirul — a self-taught tech enthusiast with a passion for Full-St
   <img src="https://img.shields.io/badge/tor-%237E4798.svg?style=for-the-badge&logo=tor-project&logoColor=white" alt="TOR"/>
   
   <br/><br/>
-  <img src="https://github-readme-stats.vercel.app/api?username=mubbashirulislam&theme=dark&hide_border=false&include_all_commits=true&count_private=true" alt="GitHub Stats"/>
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=mubbashirulislam&theme=dark&hide_border=false" alt="GitHub Streak"/>
   <br/><br/>
   
   ## 🌐 Socials:
