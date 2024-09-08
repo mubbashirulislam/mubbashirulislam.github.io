@@ -1,10 +1,10 @@
+<div align="center">
+  <img height="250" src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHRqNnRxNGdiaDNlMGZlaTdkZnJna3E2Z2JhN2hncTZwbTI5NXk1NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W3klTgJuKy5vymEoe7/giphy.gif" />
+</div>
 
 # 💫 About Me:
 Aspiring Full-Stack Developer | Flutter Learner | Cybersecurity Explorer<br><br><br>Diving deep into the MERN stack and Flutter, I'm constantly pushing my boundaries to build sleek, secure, and scalable applications. With an eye on cybersecurity, I’m not just focused on creating but doing so safely. Always learning, always improving, and always up for a challenge. Let’s build something awesome together.
 
-<div align="center">
-  <img height="250" src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHRqNnRxNGdiaDNlMGZlaTdkZnJna3E2Z2JhN2hncTZwbTI5NXk1NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W3klTgJuKy5vymEoe7/giphy.gif" />
-</div>
 
 
 ## 🌐 Socials:
