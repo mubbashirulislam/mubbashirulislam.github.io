@@ -32,8 +32,8 @@ In parallel, I am deeply involved in **Cybersecurity research**, focusing on und
   
   ## 🌐 Socials:
   <a href="https://linkedin.com/in/mubbashirul-islam"><img src="https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white" alt="LinkedIn"/></a>
+  <a href="https://twitter.com/itsfisshyinstit"><img src="https://img.shields.io/badge/X-%23000000.svg?logo=Twitter&logoColor=white" alt="X"/></a>
   <a href="https://youtube.com/@diafan1s?si=_X9Co5RideK725Ca"><img src="https://img.shields.io/badge/YouTube-%23FF0000.svg?logo=YouTube&logoColor=white" alt="YouTube"/></a>
-  <a href="https://twitter.com/Gx9rooster"><img src="https://img.shields.io/badge/X-%231DA1F2.svg?logo=Twitter&logoColor=white" alt="X"/></a>
 
   
   ---
