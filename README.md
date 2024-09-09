@@ -2,7 +2,7 @@
   <img height="250" src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHRqNnRxNGdiaDNlMGZlaTdkZnJna3E2Z2JhN2hncTZwbTI5NXk1NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W3klTgJuKy5vymEoe7/giphy.gif" />
   
   #  About Me:
-Hello, I am Mubbashirul — a 24-year-old self-taught Full Stack Developer and Cybersecurity enthusiast. With no formal education in coding, I have dedicated myself to mastering modern technologies like **Next.js** and **Firebase** to build dynamic web applications. My focus is on developing efficient and scalable solutions, leveraging frameworks like **React** and **Tailwind CSS**, while also exploring mobile development with **Flutter**.
+Hello, I am Mubbashirul — a 24-year-old self-taught **Full Stack Developer** and **Cybersecurity enthusiast**. With no formal education in coding, I have dedicated myself to mastering modern technologies like **Next.js** and **Firebase** to build dynamic web applications. My focus is on developing efficient and scalable solutions, leveraging frameworks like **React** and **Tailwind CSS**, while also exploring mobile development with **Flutter**.
 
 In parallel, I am deeply involved in **Cybersecurity research**, focusing on understanding potential threats and vulnerabilities. I study how various cyberattacks work and apply my knowledge to keep systems safe from malware, privacy breaches, and other online risks. Through personal study and hands-on experience, I have developed a strong foundation in both development and security, allowing me to approach projects with a confident mindset.
 
