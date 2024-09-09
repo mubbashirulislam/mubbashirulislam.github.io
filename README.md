@@ -2,7 +2,7 @@
   <img height="250" src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHRqNnRxNGdiaDNlMGZlaTdkZnJna3E2Z2JhN2hncTZwbTI5NXk1NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W3klTgJuKy5vymEoe7/giphy.gif" />
   
   #  About Me:
-Hello, I am Mubbashirul — a 24-year-old amateur Full Stack Developer with no formal education in coding. Currently, I am focusing on building applications using the Next.js and Firebase stack, alongside my interests in Flutter and Cybersecurity. Despite having no college degree or prior work experience, I have gained valuable knowledge and skills in my fields of interest through personal study and self-learning.
+Hello, I am Mubbashirul — a 24-year-old amateur Full Stack Developer with no formal education in coding. Currently, I am focusing on building applications using the **Next.js** and **Firebase** stack, alongside my interests in **Flutter** and **Cybersecurity**. Despite having no college degree or prior work experience, I have gained valuable knowledge and skills in my fields of interest through personal study and self-learning.
 
   
   # 💻 Tech Stack:
