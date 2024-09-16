@@ -3,7 +3,7 @@
   
   #  About Me:
 
-Here’s a more detailed and easy-to-understand version of your portfolio that clearly conveys your self-taught background and confidence in your knowledge:
+
 
 Hello, I am Mubbashirul—a 24-year-old self-taught Cybersecurity enthusiast. I have dedicated my time to mastering cybersecurity principles through independent study and practical experience. While I do not have a traditional college degree or any formal certifications, I have developed a strong, solid foundation in cybersecurity, particularly in understanding daily life threats and the methods to prevent them.
 
