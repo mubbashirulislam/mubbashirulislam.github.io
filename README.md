@@ -2,16 +2,9 @@
   <img height="250" src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHRqNnRxNGdiaDNlMGZlaTdkZnJna3E2Z2JhN2hncTZwbTI5NXk1NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W3klTgJuKy5vymEoe7/giphy.gif" />
   
   #  About Me:
+Hello, I am Mubbashirul — a 24-year-old self-taught **Full Stack Developer** and **Cybersecurity enthusiast**. With no formal education in coding, I have dedicated myself to mastering modern technologies like **Next.js** and **Firebase** to build dynamic web applications. My focus is on developing efficient and scalable solutions, leveraging frameworks like **React** and **Tailwind CSS**, while also exploring mobile development with **Flutter**.
 
-
-
-Hello, I am Mubbashirul—a 24-year-old self-taught Cybersecurity enthusiast. I have dedicated my time to mastering cybersecurity principles through independent study and practical experience. While I do not have a traditional college degree or any formal certifications, I have developed a strong, solid foundation in cybersecurity, particularly in understanding daily life threats and the methods to prevent them.
-
-My journey in cybersecurity has involved deep research into various types of cyberattacks and their potential impacts. I have focused on how these threats can affect individuals in their everyday lives and have learned effective strategies to mitigate these risks. My self-directed learning has equipped me with valuable insights into protecting against malware, privacy breaches, and other online dangers.
-
-Although I have no prior job experience or teaching roles, I am confident in my knowledge and the skills I have acquired. I am passionate about sharing what I’ve learned with others, aiming to start my career as a cybersecurity awareness trainer or advisor. I want to educate individuals on best practices for online safety and empower them to safeguard themselves in an increasingly digital world.
-
-Through workshops and training sessions, I hope to raise awareness about the importance of cybersecurity and provide practical advice that anyone can use. My goal is to make cybersecurity accessible to everyone, helping them navigate the complexities of online security with confidence.
+In parallel, I am deeply involved in **Cybersecurity research**, focusing on understanding potential threats and vulnerabilities. I study how various cyberattacks work and apply my knowledge to keep systems safe from malware, privacy breaches, and other online risks. Through personal study and hands-on experience, I have developed a strong foundation in both development and security, allowing me to approach projects with a confident mindset.
 
   
   # 💻 Tech Stack:
