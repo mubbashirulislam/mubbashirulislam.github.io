@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is my personal portfolio website, hosted on GitHub Pages at [mubbashirul.github.io](https://mubbashirulislam.github.io). It showcases my skills, experience, and professional work in various fields, including web development, software engineering, and other areas of expertise. The portfolio is designed with a clean and responsive layout to provide a seamless experience across different devices.
+This is my personal portfolio website, hosted on GitHub Pages at [mubbashirulislam.github.io](https://mubbashirulislam.github.io). It showcases my skills, experience, and professional work in various fields, including web development, software engineering, and other areas of expertise. The portfolio is designed with a clean and responsive layout to provide a seamless experience across different devices.
 
 ## Features
 
