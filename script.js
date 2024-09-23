@@ -65,10 +65,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const typed = new Typed(".multiple-text", {
     // Typed.js options
     strings: [
-      "Security Researcher",
-      "Tech Enthusiast",
-      // "Lifelong Learner",
-    ],
+      "Security Researcher", 
+      // "Tech Enthusiast", 
+      "OSINT Analyst"],
+
     typeSpeed: 40,
     backSpeed: 50,
     backDelay: 1000,
