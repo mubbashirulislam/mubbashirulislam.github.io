@@ -17,7 +17,7 @@
 :root {
     --bg-color: #121212;
     --second-bg-color: #1e1e1e;
-    --text-color:#e0e0e0 ;
+    --text-color: #e0e0e0;
     --main-color: #0ef;
 }
 
@@ -91,8 +91,7 @@ section {
 
 .home-img img {
     width: 35vw;
-    padding-left: 5%;
-    padding-right: 5%;
+    padding: 0 5%;
 }
 
 .home-content {
@@ -209,7 +208,7 @@ span {
     gap: 2rem;
 }
 
-.services-container .services-box {
+.services-box {
     flex: 1 1 30rem;
     background: var(--second-bg-color);
     padding: 3rem 2rem 4rem;
@@ -220,7 +219,7 @@ span {
     margin-bottom: 1rem;
 }
 
-.services-container .services-box:hover {
+.services-box:hover {
     border-color: var(--main-color);
     transform: scale(1.02);
 }
@@ -232,13 +231,136 @@ span {
 
 .services-box h3 {
     font-size: 2.2rem;
-    
 }
 
 .services-box p {
     font-size: 1.6rem;
     margin: 1rem 0 3rem;
-    
+}
+
+/* Professional Experience Section Styles */
+.experience {
+    background: var(--bg-color);
+}
+
+.experience h2 {
+    margin-bottom: 4rem;
+}
+
+.experience-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.experience-item {
+    background: var(--second-bg-color);
+    padding: 2rem;
+    border-radius: 2rem;
+    border: .2rem solid var(--bg-color);
+    transition: .5s ease;
+}
+
+.experience-item:hover {
+    border-color: var(--main-color);
+    transform: scale(1.02);
+}
+
+.experience-item h3 {
+    font-size: 2.4rem;
+    color: var(--main-color);
+    margin-bottom: 1rem;
+}
+
+.experience-role {
+    font-size: 1.8rem;
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+    font-style: italic;
+}
+
+.experience-details {
+    list-style-type: disc;
+    padding-left: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.experience-details li {
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+}
+
+.project-link {
+    display: inline-block;
+    padding: 1rem 2.8rem;
+    background: var(--main-color);
+    border-radius: 4rem;
+    box-shadow: 0 0 1rem var(--main-color);
+    font-size: 1.6rem;
+    color: var(--second-bg-color);
+    letter-spacing: .1rem;
+    font-weight: 600;
+    transition: .5s ease;
+}
+
+.project-link:hover {
+    box-shadow: none;
+}
+
+
+/* Skills Section Styles */
+.skills-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 3rem;
+    background: var(--bg-color);
+    padding: 2rem;
+    border-radius: 1rem;
+}
+
+.skill-category {
+    flex: 1 1 250px;
+    max-width: 300px;
+    background: var(--bg-color);
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    border: .2rem solid var(--main-color);
+    transition: .5s ease;
+}
+
+.skill-category:hover {
+    /* border-color: var(--text-color); */
+    transform: scale(1.05);
+}
+
+.skill-category h3 {
+    font-size: 2.4rem;
+    margin-bottom: 1.5rem;
+    color: var(--main-color);
+    font-weight: bold;
+}
+
+.skill-list {
+    list-style: none;
+    padding: 0;
+}
+
+.skill-list li {
+    font-size: 1.6rem;
+    margin: 1rem 0;
+    position: relative;
+    padding-left: 2rem;
+}
+
+.skill-list li::before {
+    content: '✔'; /* Add an icon or use a library like FontAwesome */
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--main-color);
 }
 
 /* Portfolio Section Styles */
@@ -256,18 +378,18 @@ span {
     gap: 3rem;
 }
 
-.portfolio-container .portfolio-box {
+.portfolio-box {
     position: relative;
     border-radius: 2rem;
     box-shadow: 0 0 1rem var(--bg-color);
     overflow: hidden;
-    aspect-ratio: 1 / 1; /* Maintain a square aspect ratio */
+    aspect-ratio: 1 / 1;
 }
 
 .portfolio-box img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Ensure the image covers the entire box */
+    object-fit: cover;
     transition: transform 0.5s ease;
 }
 
@@ -275,9 +397,9 @@ span {
     transform: scale(1.1);
 }
 
-.portfolio-box .portfolio-layer {
+.portfolio-layer {
     position: absolute;
-    inset: 0; /* Shorthand for top: 0; right: 0; bottom: 0; left: 0; */
+    inset: 0;
     background: linear-gradient(rgba(0, 0, 0, .1), var(--bg-color));
     display: flex;
     justify-content: center;
@@ -316,6 +438,45 @@ span {
 .portfolio-layer a i {
     font-size: 2rem;
     color: var(--second-bg-color);
+}
+
+/* Certifications Section Styles */
+.cert-container {
+    display:flex;
+    /* background: var(--second-bg-color); */
+    overflow-x: auto;
+    gap: 2rem;
+    padding: 2rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--main-color) var(--bg-color);
+}
+
+.cert-item {
+    flex: 0 0 auto;
+    width: 500px;
+    background: var(--bg-color);
+    border-radius: 1rem;
+    text-align: center;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cert-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.3);
+}
+
+.cert-item img {
+    width: 100%;
+    border-radius: 1rem 1rem 0 0;
+}
+
+.cert-name {
+    font-size: 1.6rem;
+    color: var(--main-color);
+    padding: 1rem;
+    background: var(--second-bg-color);
+    border-radius: 0 0 1rem 1rem;
 }
 
 /* Contact Section Styles */
@@ -409,10 +570,7 @@ span {
         padding: 10rem 3% 2rem;
     }
 
-    .services {
-        padding-bottom: 7rem;
-    }
-
+    .services,
     .portfolio {
         padding-bottom: 7rem;
     }
@@ -465,7 +623,8 @@ span {
         font-size: 5rem;
     }
 
-    .home-img img {
+    .home-img img,
+    .about-img img {
         width: 70vw;
         margin-top: 4rem;
     }
@@ -474,15 +633,7 @@ span {
         flex-direction: column-reverse;
     }
 
-    .about img {
-        width: 70vw;
-        margin-top: 4rem;
-    }
-
-    .services h2 {
-        margin-bottom: 3rem;
-    }
-
+    .services h2,
     .portfolio h2 {
         margin-bottom: 3rem;
     }
@@ -509,10 +660,7 @@ span {
 }
 
 @media (max-width: 365px) {
-    .home-img img {
-        width: 90vw;
-    }
-
+    .home-img img,
     .about-img img {
         width: 90vw;
     }

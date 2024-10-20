@@ -43,32 +43,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Scroll reveal initialization
   const sr = ScrollReveal({
-    // ScrollReveal options
     distance: "80px",
     duration: 2000,
     delay: 200,
   });
 
   // Scroll reveal animations
-  // Reveal elements from top
   sr.reveal(".home-content, .heading", { origin: "top" });
-  // Reveal elements from bottom
-  sr.reveal(".home-img, .services-container, .portfolio-box, .contact form", {
-    origin: "bottom",
-  });
-  // Reveal elements from left
+  sr.reveal(
+    ".home-img, .services-container, .portfolio-box, .contact form, .skills-container, .cert-container, .experience-container",
+    {
+      origin: "bottom",
+    }
+  );
   sr.reveal(".home-content h1, .about-img", { origin: "left" });
-  // Reveal elements from right
   sr.reveal(".home-content p, .about-content", { origin: "right" });
 
   // Typed.js initialization
   const typed = new Typed(".multiple-text", {
-    // Typed.js options
-    strings: [
-      "Security Researcher", 
-      // "Tech Enthusiast", 
-      "OSINT Analyst"],
-
+    strings: ["Security Researcher", "OSINT Analyst"],
     typeSpeed: 40,
     backSpeed: 50,
     backDelay: 1000,
@@ -80,16 +73,15 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("scroll", handleScroll);
 });
 
-
-
 // EmailJS script
+(function () {
+  // TODO: Replace with your EmailJS user ID
+  emailjs.init("0BYX4kqnwqAFQWw8Z");
+})();
 
-  (function() {
-    // TODO: Replace with your EmailJS user ID
-    emailjs.init("0BYX4kqnwqAFQWw8Z");
-  })();
-
-  document.getElementById('contact-form').addEventListener('submit', function(event) {
+document
+  .getElementById("contact-form")
+  .addEventListener("submit", function (event) {
     event.preventDefault();
 
     // TODO: Replace with your EmailJS service ID and template ID
