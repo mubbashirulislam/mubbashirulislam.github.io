@@ -526,6 +526,10 @@ img, video, iframe {
     gap: 8px;
 }
 
+.carousel-controls[hidden] {
+    display: none;
+}
+
 .carousel-controls button {
     width: 42px;
     height: 42px;
@@ -536,7 +540,12 @@ img, video, iframe {
     cursor: pointer;
 }
 
-.carousel-controls button:hover {
+.carousel-controls button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.carousel-controls button:not(:disabled):hover {
     color: #001316;
     background: var(--accent);
     border-color: var(--accent);

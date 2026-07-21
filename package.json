@@ -5,6 +5,7 @@
   "type": "module",
   "description": "Static short-form video editor portfolio for GitHub Pages",
   "scripts": {
+    "serve": "node scripts/serve.mjs",
     "validate": "node --check js/projects.js && node --check js/main.js && node scripts/validate.mjs && node scripts/smoke.mjs"
   },
   "engines": {

@@ -72,8 +72,17 @@ if (exists("js/projects.js")) {
             if (slugs.has(project.slug)) errors.push(`Duplicate project slug: ${project.slug}`);
             slugs.add(project.slug);
             if (/^javascript:/i.test(project.image)) errors.push(`Unsafe project image URL: ${project.slug}`);
+            if (/^https?:\/\//i.test(project.image)) errors.push(`Project image must be stored locally: ${project.slug}`);
+            const imagePath = String(project.image || "").replace(/^\.?\//, "");
+            if (imagePath && !exists(imagePath)) errors.push(`Missing project image file: ${project.slug} (${imagePath})`);
         }
     }
+}
+
+if (exists("404.html")) {
+    const notFound = read("404.html");
+    if (!notFound.includes('href="/css/style.css"')) errors.push("404 page stylesheet must be root-relative.");
+    if (!notFound.includes('href="/"')) errors.push("404 page return link must point to the site root.");
 }
 
 if (exists("site.webmanifest")) {

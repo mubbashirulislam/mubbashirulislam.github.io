@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import http from "node:http";
 import path from "node:path";
+import vm from "node:vm";
 
 const root = process.cwd();
 const expected = [
@@ -15,10 +16,18 @@ const expected = [
     ["/sitemap.xml", "application/xml"]
 ];
 
+const projectContext = { window: {} };
+vm.runInNewContext(fs.readFileSync(path.join(root, "js/projects.js"), "utf8"), projectContext, { filename: "js/projects.js" });
+for (const image of new Set(projectContext.window.PORTFOLIO_PROJECTS.map((project) => project.image))) {
+    expected.push([`/${String(image).replace(/^\.?\//, "")}`, "image/jpeg"]);
+}
+
 const contentTypes = new Map([
     [".html", "text/html; charset=utf-8"],
     [".css", "text/css; charset=utf-8"],
     [".js", "text/javascript; charset=utf-8"],
+    [".jpg", "image/jpeg"],
+    [".jpeg", "image/jpeg"],
     [".png", "image/png"],
     [".txt", "text/plain; charset=utf-8"],
     [".xml", "application/xml; charset=utf-8"]

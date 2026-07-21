@@ -22,6 +22,25 @@
     let activeProject = null;
     let previousFocus = null;
 
+    function updateCarouselControls() {
+        document.querySelectorAll(".carousel-module").forEach((section) => {
+            const container = section.querySelector(".carousel-container");
+            const track = section.querySelector(".carousel-track");
+            const controls = section.querySelector(".carousel-controls");
+            const cards = Array.from(track.querySelectorAll(".project-card:not([data-clone='true'])"));
+            const styles = window.getComputedStyle(track);
+            const gap = Number.parseFloat(styles.columnGap || styles.gap) || 0;
+            const padding = (Number.parseFloat(styles.paddingLeft) || 0) + (Number.parseFloat(styles.paddingRight) || 0);
+            const contentWidth = cards.reduce((total, card) => total + card.getBoundingClientRect().width, 0) + gap * Math.max(cards.length - 1, 0) + padding;
+            const canNavigate = contentWidth > container.clientWidth + 1;
+
+            controls.hidden = !canNavigate;
+            controls.querySelectorAll("button").forEach((button) => {
+                button.disabled = !canNavigate;
+            });
+        });
+    }
+
     function element(tag, className, text) {
         const node = document.createElement(tag);
         if (className) node.className = className;
@@ -109,6 +128,7 @@
         });
 
         portfolioSections.replaceChildren(fragment);
+        window.requestAnimationFrame(updateCarouselControls);
     }
 
     function setMotionPaused(paused) {
@@ -299,6 +319,7 @@
                 container.scrollBy({ left: direction * 310, behavior: "smooth" });
             });
         });
+        window.addEventListener("resize", updateCarouselControls, { passive: true });
     }
 
     function initializeContactForm() {
