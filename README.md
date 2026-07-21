@@ -46,7 +46,24 @@ For a privacy-enhanced YouTube embed, use `video: { type: "youtube", id: "VIDEO_
 
 ## Local preview
 
-Serve the directory through any static HTTP server. Opening `index.html` directly also displays the site, but some browser security behavior is best tested over HTTP.
+Node.js 20 or newer is required. No dependency installation is necessary.
+
+```bash
+npm run validate
+npm run serve
+```
+
+Open `http://127.0.0.1:4177/` after starting the preview. Run validation before every commit; it checks JavaScript syntax, required production files, project media and static HTTP responses.
+
+## Development workflow
+
+1. Start from a clean, synchronized `main` branch.
+2. Make the requested content or functionality changes.
+3. Run `npm run validate` and review the diff.
+4. Commit intentionally and push to `main`.
+5. Confirm the Pages workflow succeeds and verify the live site.
+
+GitHub Actions dependencies are pinned to full commit SHAs. Dependabot checks those pins weekly and proposes grouped maintenance updates.
 
 ## Deployment
 

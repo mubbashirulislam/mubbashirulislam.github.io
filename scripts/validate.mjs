@@ -95,8 +95,10 @@ if (exists("site.webmanifest")) {
 
 if (exists(".github/workflows/pages.yml")) {
     const workflow = read(".github/workflows/pages.yml");
-    for (const action of ["actions/checkout@v4", "actions/configure-pages@v5", "actions/upload-pages-artifact@v3", "actions/deploy-pages@v4"]) {
-        if (!workflow.includes(action)) errors.push(`Pages workflow is missing ${action}.`);
+    for (const action of ["actions/checkout", "actions/configure-pages", "actions/upload-pages-artifact", "actions/deploy-pages"]) {
+        const escapedAction = action.replace("/", "\\/");
+        const pinnedAction = new RegExp(`uses:\\s+${escapedAction}@[0-9a-f]{40}\\b`);
+        if (!pinnedAction.test(workflow)) errors.push(`Pages workflow must pin ${action} to a full commit SHA.`);
     }
 }
 
