@@ -1,0 +1,13 @@
+{
+  "name": "mubbashirul-video-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Static short-form video editor portfolio for GitHub Pages",
+  "scripts": {
+    "validate": "node --check js/projects.js && node --check js/main.js && node scripts/validate.mjs && node scripts/smoke.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

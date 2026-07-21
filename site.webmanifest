@@ -1,0 +1,9 @@
+{
+  "name": "Mubbashirul Islam — Video Editor",
+  "short_name": "MI Edits",
+  "description": "Retention-focused short-form video editing portfolio.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#030303",
+  "theme_color": "#030303"
+}
