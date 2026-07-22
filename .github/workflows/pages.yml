@@ -30,6 +30,9 @@ jobs:
       - name: Validate portfolio
         run: npm run validate
 
+      - name: Validate Chased by ALAM assets
+        run: node chased-by-alam/verify-assets.cjs
+
       - name: Assemble public site
         shell: bash
         run: |
@@ -37,6 +40,7 @@ jobs:
           mkdir -p _site
           cp index.html 404.html privacy.html robots.txt sitemap.xml site.webmanifest .nojekyll _site/
           cp -R css js assets _site/
+          cp -R chased-by-alam _site/
 
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
