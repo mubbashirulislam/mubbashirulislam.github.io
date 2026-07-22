@@ -11,6 +11,7 @@ const contentTypes = new Map([
     [".js", "text/javascript; charset=utf-8"],
     [".jpg", "image/jpeg"],
     [".jpeg", "image/jpeg"],
+    [".mp3", "audio/mpeg"],
     [".png", "image/png"],
     [".svg", "image/svg+xml"],
     [".webmanifest", "application/manifest+json; charset=utf-8"],
@@ -32,9 +33,12 @@ const server = http.createServer((request, response) => {
     const resolved = path.resolve(root, `.${pagePath}`);
     const isWithinRoot = resolved.startsWith(`${root}${path.sep}`);
     const isFile = isWithinRoot && fs.existsSync(resolved) && fs.statSync(resolved).isFile();
-    const target = isFile ? resolved : path.join(root, "404.html");
+    const directoryIndex = isWithinRoot ? path.join(resolved, "index.html") : "";
+    const hasDirectoryIndex = !isFile && directoryIndex && fs.existsSync(directoryIndex)
+        && fs.statSync(directoryIndex).isFile();
+    const target = isFile ? resolved : hasDirectoryIndex ? directoryIndex : path.join(root, "404.html");
 
-    response.statusCode = isFile ? 200 : 404;
+    response.statusCode = isFile || hasDirectoryIndex ? 200 : 404;
     response.setHeader("Content-Type", contentTypes.get(path.extname(target)) || "application/octet-stream");
     response.setHeader("Cache-Control", "no-store");
     fs.createReadStream(target).pipe(response);

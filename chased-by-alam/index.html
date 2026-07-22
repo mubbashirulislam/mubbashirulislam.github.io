@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chased by ALAM</title>
     <meta name="description" content="A first-person horror chase game. ALAM is coming. Run.">
+    <meta name="game-version" content="beta-1.1">
 
     <!-- ═══════════════════════════════════════════════════════════════
          THREE.JS IMPORT MAP — Using jsDelivr CDN (v0.184.0)
@@ -83,7 +84,19 @@
             color: rgba(255, 200, 150, 0.6);
             letter-spacing: 0.3em;
             text-transform: uppercase;
-            margin-bottom: 2rem;
+            margin-bottom: 0.65rem;
+        }
+
+        #overlay-start .version-tag {
+            margin-bottom: 1.7rem;
+            padding: 0.25rem 0.65rem;
+            border: 1px solid rgba(255, 200, 100, 0.22);
+            border-radius: 999px;
+            color: rgba(255, 215, 145, 0.62);
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
         }
 
         .menu-buttons {
@@ -695,6 +708,7 @@
     <div id="overlay-start">
         <h1>Chased by ALAM</h1>
         <p class="subtitle">He's always hungry</p>
+        <p class="version-tag">Beta 1.1</p>
         <div class="menu-buttons">
             <button class="menu-btn primary" id="btn-play" type="button">▶ PLAY</button>
             <button class="menu-btn" id="btn-settings" type="button">⚙ SETTINGS</button>
@@ -858,7 +872,6 @@
     ═══════════════════════════════════════════════════════════════ -->
     <script type="module">
         import * as THREE from 'three';
-        import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
 
         // ═══════════════════════════════════════════════════════════
         // ★★★  CUSTOMIZABLE ASSET URLS — SWAP THESE EASILY  ★★★
@@ -927,11 +940,42 @@
 
         let settings = { ...DEFAULT_SETTINGS };
 
+        function clampNumber(value, minimum, maximum, fallback) {
+            const numericValue = Number(value);
+            return Number.isFinite(numericValue)
+                ? Math.min(maximum, Math.max(minimum, numericValue))
+                : fallback;
+        }
+
+        function sanitizeSettings(candidate = {}) {
+            const difficulty = ['easy', 'normal', 'hard', 'nightmare'].includes(candidate.difficulty)
+                ? candidate.difficulty
+                : DEFAULT_SETTINGS.difficulty;
+            const headBob = ['on', 'reduced', 'off'].includes(candidate.headBob)
+                ? candidate.headBob
+                : DEFAULT_SETTINGS.headBob;
+            const quality = ['auto', 'high', 'low'].includes(candidate.quality)
+                ? candidate.quality
+                : DEFAULT_SETTINGS.quality;
+
+            return {
+                sensitivity: clampNumber(candidate.sensitivity, 0.1, 2, DEFAULT_SETTINGS.sensitivity),
+                volume: Math.round(clampNumber(candidate.volume, 0, 100, DEFAULT_SETTINGS.volume)),
+                fov: Math.round(clampNumber(candidate.fov, 55, 110, DEFAULT_SETTINGS.fov)),
+                difficulty,
+                showFps: typeof candidate.showFps === 'boolean' ? candidate.showFps : DEFAULT_SETTINGS.showFps,
+                headBob,
+                quality,
+            };
+        }
+
         function loadSettings() {
             try {
                 const saved = localStorage.getItem(STORAGE_KEY);
-                if (saved) settings = { ...DEFAULT_SETTINGS, ...JSON.parse(saved) };
-            } catch(e) {}
+                settings = sanitizeSettings(saved ? JSON.parse(saved) : DEFAULT_SETTINGS);
+            } catch(e) {
+                settings = { ...DEFAULT_SETTINGS };
+            }
         }
 
         function saveSettings() {
@@ -976,14 +1020,18 @@
         const CONFIG = {
             PLAYER_HEIGHT: 1.7,
             PLAYER_RADIUS: 0.4,
+            MOVEMENT_ACCELERATION: 20,
+            MOVEMENT_DECELERATION: 30,
+            MOVEMENT_MAX_STEP: 0.1,
+            MAX_FRAME_DELTA: 0.05,
             SPRINT_MAX: 100,
             SPRINT_MIN_TO_START: 20,
 
             // Head bob
             BOB_WALK_FREQ: 8.0,
-            BOB_WALK_AMP: 0.045,
+            BOB_WALK_AMP: 0.03,
             BOB_SPRINT_FREQ: 11.0,
-            BOB_SPRINT_AMP: 0.065,
+            BOB_SPRINT_AMP: 0.045,
 
             // Nextbot
             NEXTBOT_WIDTH: 1.55,
@@ -1346,8 +1394,112 @@
         const hemiLight = new THREE.HemisphereLight(0xffd89b, 0x19180f, 0.28);
         scene.add(hemiLight);
 
-        // PointerLockControls
-        const controls = new PointerLockControls(camera, document.body);
+        // Pointer-lock controls with spike filtering. Some browsers report a large synthetic
+        // mouse delta while entering or leaving pointer lock; accepting that raw value caused
+        // the camera to snap even though the player had not moved the mouse.
+        class SafePointerLockControls extends THREE.EventDispatcher {
+            constructor(object, domElement) {
+                super();
+                this.object = object;
+                this.domElement = domElement;
+                this.enabled = true;
+                this.isLocked = false;
+                this.pointerSpeed = 1;
+                this.minPolarAngle = 0;
+                this.maxPolarAngle = Math.PI;
+                this.pendingMovementX = 0;
+                this.pendingMovementY = 0;
+                this.ignoreMovementUntil = 0;
+                this.lookEuler = new THREE.Euler(0, 0, 0, 'YXZ');
+
+                this.onMouseMove = this.onMouseMove.bind(this);
+                this.onPointerLockChange = this.onPointerLockChange.bind(this);
+                this.onPointerLockError = this.onPointerLockError.bind(this);
+                document.addEventListener('mousemove', this.onMouseMove);
+                document.addEventListener('pointerlockchange', this.onPointerLockChange);
+                document.addEventListener('pointerlockerror', this.onPointerLockError);
+            }
+
+            resetLookInput(warmupMilliseconds = 0) {
+                this.pendingMovementX = 0;
+                this.pendingMovementY = 0;
+                this.ignoreMovementUntil = performance.now() + warmupMilliseconds;
+            }
+
+            onMouseMove(event) {
+                if (!this.enabled || !this.isLocked || performance.now() < this.ignoreMovementUntil) return;
+
+                const rawX = Number(event.movementX);
+                const rawY = Number(event.movementY);
+                if (!Number.isFinite(rawX) || !Number.isFinite(rawY)) return;
+
+                // Discard impossible one-event jumps and cap normal high-polling mouse bursts.
+                if (Math.abs(rawX) > 600 || Math.abs(rawY) > 600) {
+                    this.resetLookInput();
+                    return;
+                }
+
+                const eventLimit = 120;
+                const frameLimit = 240;
+                this.pendingMovementX = THREE.MathUtils.clamp(
+                    this.pendingMovementX + THREE.MathUtils.clamp(rawX, -eventLimit, eventLimit),
+                    -frameLimit, frameLimit
+                );
+                this.pendingMovementY = THREE.MathUtils.clamp(
+                    this.pendingMovementY + THREE.MathUtils.clamp(rawY, -eventLimit, eventLimit),
+                    -frameLimit, frameLimit
+                );
+            }
+
+            updateLook() {
+                if (!this.enabled || !this.isLocked) {
+                    this.resetLookInput();
+                    return;
+                }
+
+                const sensitivity = clampNumber(this.pointerSpeed, 0.1, 2, DEFAULT_SETTINGS.sensitivity);
+                const angularScale = 0.002 * sensitivity;
+                const yawDelta = THREE.MathUtils.clamp(-this.pendingMovementX * angularScale, -0.32, 0.32);
+                const pitchDelta = THREE.MathUtils.clamp(-this.pendingMovementY * angularScale, -0.28, 0.28);
+                this.pendingMovementX = 0;
+                this.pendingMovementY = 0;
+
+                if (yawDelta === 0 && pitchDelta === 0) return;
+                this.lookEuler.setFromQuaternion(this.object.quaternion);
+                this.lookEuler.y += yawDelta;
+                this.lookEuler.x += pitchDelta;
+                const halfPi = Math.PI / 2;
+                this.lookEuler.x = Math.max(
+                    halfPi - this.maxPolarAngle,
+                    Math.min(halfPi - this.minPolarAngle, this.lookEuler.x)
+                );
+                this.object.quaternion.setFromEuler(this.lookEuler);
+                this.dispatchEvent({ type: 'change' });
+            }
+
+            onPointerLockChange() {
+                const isLockedNow = document.pointerLockElement === this.domElement;
+                if (isLockedNow === this.isLocked) return;
+                this.isLocked = isLockedNow;
+                this.resetLookInput(isLockedNow ? 100 : 0);
+                this.dispatchEvent({ type: isLockedNow ? 'lock' : 'unlock' });
+            }
+
+            onPointerLockError() {
+                this.resetLookInput();
+            }
+
+            lock() {
+                this.resetLookInput(100);
+                this.domElement.requestPointerLock();
+            }
+
+            unlock() {
+                if (document.pointerLockElement === this.domElement) document.exitPointerLock();
+            }
+        }
+
+        const controls = new SafePointerLockControls(camera, document.body);
         controls.pointerSpeed = settings.sensitivity;
 
         // ───────────────────────────────────────────────────────────
@@ -1371,6 +1523,7 @@
         const targetVelocity = new THREE.Vector3();
         const testPosX = new THREE.Vector3();
         const testPosZ = new THREE.Vector3();
+        const lastSafePlayerPosition = new THREE.Vector3();
         const moveDir = new THREE.Vector3();
         const nextbotTestPosition = new THREE.Vector3();
         const minimapRight = new THREE.Vector3();
@@ -2326,31 +2479,90 @@
         // ───────────────────────────────────────────────────────────
         //  COLLISION
         // ───────────────────────────────────────────────────────────
-        const playerCollisionBox = new THREE.Box3();
-        const nextbotCollisionBox = new THREE.Box3();
         const lineOfSightCollisionBox = new THREE.Box3();
         const lineOfSightSample = new THREE.Vector3();
 
-        function intersectsNearbyWall(box, pos) {
-            const cellX = Math.floor(pos.x / CONFIG.CELL_SIZE);
-            const cellZ = Math.floor(pos.z / CONFIG.CELL_SIZE);
-            const nearbyWalls = wallCollisionBuckets.get(`${cellX},${cellZ}`) || [];
-            for (const wallBox of nearbyWalls) {
-                if (box.intersectsBox(wallBox)) return true;
+        function visitNearbyWalls(minX, maxX, minZ, maxZ, visitor) {
+            const cellSize = CONFIG.CELL_SIZE;
+            const minCellX = Math.floor(minX / cellSize);
+            const maxCellX = Math.floor(maxX / cellSize);
+            const minCellZ = Math.floor(minZ / cellSize);
+            const maxCellZ = Math.floor(maxZ / cellSize);
+            const visitedWalls = new Set();
+
+            for (let cellZ = minCellZ; cellZ <= maxCellZ; cellZ++) {
+                for (let cellX = minCellX; cellX <= maxCellX; cellX++) {
+                    const nearbyWalls = wallCollisionBuckets.get(`${cellX},${cellZ}`) || [];
+                    for (const wallBox of nearbyWalls) {
+                        if (visitedWalls.has(wallBox)) continue;
+                        visitedWalls.add(wallBox);
+                        if (visitor(wallBox)) return true;
+                    }
+                }
             }
             return false;
         }
 
+        function intersectsNearbyWall(box) {
+            return visitNearbyWalls(box.min.x, box.max.x, box.min.z, box.max.z,
+                wallBox => box.intersectsBox(wallBox));
+        }
+
+        function circleIntersectsNearbyWall(position, radius) {
+            return visitNearbyWalls(
+                position.x - radius, position.x + radius,
+                position.z - radius, position.z + radius,
+                wallBox => {
+                    const closestX = THREE.MathUtils.clamp(position.x, wallBox.min.x, wallBox.max.x);
+                    const closestZ = THREE.MathUtils.clamp(position.z, wallBox.min.z, wallBox.max.z);
+                    const dx = position.x - closestX;
+                    const dz = position.z - closestZ;
+                    return dx * dx + dz * dz < radius * radius;
+                }
+            );
+        }
+
         function checkWallCollision(newPos) {
-            playerCollisionBox.min.set(newPos.x - CONFIG.PLAYER_RADIUS, 0, newPos.z - CONFIG.PLAYER_RADIUS);
-            playerCollisionBox.max.set(newPos.x + CONFIG.PLAYER_RADIUS, CONFIG.PLAYER_HEIGHT, newPos.z + CONFIG.PLAYER_RADIUS);
-            return intersectsNearbyWall(playerCollisionBox, newPos);
+            return circleIntersectsNearbyWall(newPos, CONFIG.PLAYER_RADIUS);
         }
 
         function checkNextbotWallCollision(pos, radius) {
-            nextbotCollisionBox.min.set(pos.x - radius, 0, pos.z - radius);
-            nextbotCollisionBox.max.set(pos.x + radius, CONFIG.WALL_HEIGHT, pos.z + radius);
-            return intersectsNearbyWall(nextbotCollisionBox, pos);
+            return circleIntersectsNearbyWall(pos, radius);
+        }
+
+        function isPlayerPositionValid(position) {
+            if (!Number.isFinite(position.x) || !Number.isFinite(position.z)) return false;
+            const cell = worldToCell(position.x, position.z);
+            return reachableCellKeys.has(`${cell.x},${cell.y}`) && !checkWallCollision(position);
+        }
+
+        function movePlayerWithCollisions(delta) {
+            const totalX = velocity.x * delta;
+            const totalZ = velocity.z * delta;
+            const largestDisplacement = Math.max(Math.abs(totalX), Math.abs(totalZ));
+            const substeps = Math.max(1, Math.ceil(largestDisplacement / CONFIG.MOVEMENT_MAX_STEP));
+            const stepX = totalX / substeps;
+            const stepZ = totalZ / substeps;
+
+            for (let step = 0; step < substeps; step++) {
+                testPosX.copy(camera.position);
+                testPosX.x += stepX;
+                if (!checkWallCollision(testPosX)) camera.position.x = testPosX.x;
+                else velocity.x = 0;
+
+                testPosZ.copy(camera.position);
+                testPosZ.z += stepZ;
+                if (!checkWallCollision(testPosZ)) camera.position.z = testPosZ.z;
+                else velocity.z = 0;
+            }
+
+            if (isPlayerPositionValid(camera.position)) {
+                lastSafePlayerPosition.copy(camera.position);
+            } else {
+                camera.position.x = lastSafePlayerPosition.x;
+                camera.position.z = lastSafePlayerPosition.z;
+                velocity.set(0, 0, 0);
+            }
         }
 
         function hasDirectLineOfSight(startX, startZ, endX, endZ) {
@@ -2365,7 +2577,7 @@
                 lineOfSightSample.set(startX + dx * t, 1, startZ + dz * t);
                 lineOfSightCollisionBox.min.set(lineOfSightSample.x - radius, 0.2, lineOfSightSample.z - radius);
                 lineOfSightCollisionBox.max.set(lineOfSightSample.x + radius, 2.5, lineOfSightSample.z + radius);
-                if (intersectsNearbyWall(lineOfSightCollisionBox, lineOfSightSample)) return false;
+                if (intersectsNearbyWall(lineOfSightCollisionBox)) return false;
             }
             return true;
         }
@@ -2746,6 +2958,8 @@
             const playerStart = cellToWorld(PLAYER_START_CELL.x, PLAYER_START_CELL.y);
             camera.position.set(playerStart.x, CONFIG.PLAYER_HEIGHT, playerStart.z);
             camera.rotation.set(0, 0, 0);
+            controls.resetLookInput(100);
+            lastSafePlayerPosition.copy(camera.position);
 
             // Reset state
             sprintStamina = CONFIG.SPRINT_MAX;
@@ -2830,7 +3044,10 @@
         function update() {
             if (gameState !== 'playing') return;
 
-            const delta = Math.min(gameTimer.getDelta(), 0.05);
+            const rawDelta = gameTimer.getDelta();
+            const delta = Number.isFinite(rawDelta)
+                ? Math.max(0, Math.min(rawDelta, CONFIG.MAX_FRAME_DELTA))
+                : 0;
             const graceWasActive = spawnGraceRemaining > 0;
             if (graceWasActive) {
                 spawnGraceRemaining = Math.max(0, spawnGraceRemaining - delta);
@@ -2873,8 +3090,11 @@
 
             // ── Sprint Stamina ──
             const diff = getDifficulty();
+            const movementInputX = Number(keys.right) - Number(keys.left);
+            const movementInputZ = Number(keys.forward) - Number(keys.backward);
+            const hasMovementInput = movementInputX !== 0 || movementInputZ !== 0;
             const isSprinting = keys.sprint && canSprint && sprintStamina > 0 &&
-                (keys.forward || keys.backward || keys.left || keys.right);
+                hasMovementInput;
 
             if (isSprinting) {
                 sprintStamina -= diff.sprintDrain * delta;
@@ -2897,9 +3117,8 @@
 
             // ── Player Movement ──
             const speed = isSprinting ? diff.sprintSpeed : diff.walkSpeed;
-            const isMoving = keys.forward || keys.backward || keys.left || keys.right;
 
-            // Extract camera directions (same method as PointerLockControls internally)
+            // Build planar camera directions. Diagonal input is normalized below.
             camRight.setFromMatrixColumn(camera.matrix, 0);
             camRight.y = 0;
             camRight.normalize();
@@ -2909,40 +3128,19 @@
             camForward.normalize();
 
             targetVelocity.set(0, 0, 0);
-            if (keys.forward)  targetVelocity.addScaledVector(camForward, speed);
-            if (keys.backward) targetVelocity.addScaledVector(camForward, -speed);
-            if (keys.right)    targetVelocity.addScaledVector(camRight, speed);
-            if (keys.left)     targetVelocity.addScaledVector(camRight, -speed);
-
-            if (targetVelocity.length() > speed) {
+            if (hasMovementInput) {
+                targetVelocity.addScaledVector(camForward, movementInputZ);
+                targetVelocity.addScaledVector(camRight, movementInputX);
                 targetVelocity.normalize().multiplyScalar(speed);
             }
 
-            const accel = 30;
-            const friction = 15;
+            const movementResponse = hasMovementInput
+                ? CONFIG.MOVEMENT_ACCELERATION
+                : CONFIG.MOVEMENT_DECELERATION;
+            velocity.lerp(targetVelocity, 1 - Math.exp(-movementResponse * delta));
 
-            if (isMoving) {
-                velocity.lerp(targetVelocity, 1 - Math.exp(-accel * delta));
-            } else {
-                velocity.multiplyScalar(Math.exp(-friction * delta));
-            }
-
-            // Collision - slide along walls
-            testPosX.copy(camera.position);
-            testPosX.x += velocity.x * delta;
-            if (!checkWallCollision(testPosX)) {
-                camera.position.x = testPosX.x;
-            } else {
-                velocity.x = 0;
-            }
-
-            testPosZ.copy(camera.position);
-            testPosZ.z += velocity.z * delta;
-            if (!checkWallCollision(testPosZ)) {
-                camera.position.z = testPosZ.z;
-            } else {
-                velocity.z = 0;
-            }
+            // Substeps prevent low-FPS frames from tunnelling through thin wall geometry.
+            movePlayerWithCollisions(delta);
 
             const travelledThisFrame = Math.hypot(
                 camera.position.x - lastTrackedPosition.x,
@@ -2951,6 +3149,7 @@
             if (travelledThisFrame < 1) roundDistance += travelledThisFrame;
             lastTrackedPosition.set(camera.position.x, camera.position.z);
             if (isSprinting) sprintUsed = true;
+            const isActuallyMoving = travelledThisFrame > 0.0005;
 
             const playerCell = worldToCell(camera.position.x, camera.position.z);
             if (playerCell.x >= 0 && playerCell.x < MAZE_W && playerCell.y >= 0 && playerCell.y < MAZE_H) {
@@ -2964,7 +3163,7 @@
             if (updateObjectives(delta)) return;
 
             // ── Head Bob ──
-            if (settings.headBob !== 'off' && isMoving && velocity.length() > 1) {
+            if (settings.headBob !== 'off' && isActuallyMoving && velocity.length() > 1) {
                 const freq = isSprinting ? CONFIG.BOB_SPRINT_FREQ : CONFIG.BOB_WALK_FREQ;
                 let amp = isSprinting ? CONFIG.BOB_SPRINT_AMP : CONFIG.BOB_WALK_AMP;
                 if (settings.headBob === 'reduced') amp *= 0.4;
@@ -2977,10 +3176,10 @@
             }
 
             // ── Footstep Audio ──
-            if (isMoving && velocity.length() > 2) {
+            if (isActuallyMoving && velocity.length() > 2) {
                 playFootstep(isSprinting);
             }
-            updateBreathing(delta, isMoving, isSprinting);
+            updateBreathing(delta, isActuallyMoving, isSprinting);
 
             // ── Nextbot AI ──
             if (nextbot && nextbotMesh) {
@@ -2989,7 +3188,7 @@
                     camera.position.z - nextbot.position.z
                 );
                 if (spawnGraceRemaining === 0) {
-                    dist = updateNextbotBehavior(delta, diff, isMoving, isSprinting);
+                    dist = updateNextbotBehavior(delta, diff, isActuallyMoving, isSprinting);
                 }
 
                 // Billboard
@@ -3083,7 +3282,10 @@
         function animate(timestamp) {
             gameTimer.update(timestamp);
             const shouldRender = gameState === 'playing' || renderRequested;
-            if (gameState === 'playing') update();
+            if (gameState === 'playing') {
+                controls.updateLook();
+                update();
+            }
             if (shouldRender) {
                 renderer.render(scene, camera);
                 renderRequested = false;
@@ -3148,13 +3350,15 @@
         }
 
         function applySettingsFromUI() {
-            settings.sensitivity = parseFloat(setSensitivity.value);
-            settings.volume = parseInt(setVolume.value);
-            settings.fov = parseInt(setFov.value);
-            settings.difficulty = setDifficulty.value;
-            settings.showFps = setFps.value === 'on';
-            settings.headBob = setHeadBob.value;
-            settings.quality = setQuality.value;
+            settings = sanitizeSettings({
+                sensitivity: setSensitivity.value,
+                volume: setVolume.value,
+                fov: setFov.value,
+                difficulty: setDifficulty.value,
+                showFps: setFps.value === 'on',
+                headBob: setHeadBob.value,
+                quality: setQuality.value,
+            });
 
             // Apply live
             controls.pointerSpeed = settings.sensitivity;
@@ -3231,6 +3435,7 @@
             keys.right = false;
             keys.sprint = false;
             keys.interact = false;
+            velocity.set(0, 0, 0);
         }
 
         function requestGameStart() {
@@ -3260,6 +3465,10 @@
 
         // Keyboard
         document.addEventListener('keydown', (e) => {
+            if (gameState === 'playing' && ['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight',
+                'ShiftLeft', 'ShiftRight', 'KeyE', 'KeyM'].includes(e.code)) {
+                e.preventDefault();
+            }
             if (e.repeat) return; // Prevent key repeat issues
 
             switch (e.code) {
@@ -3335,8 +3544,11 @@
         controls.addEventListener('lock', () => {
             if ((gameState === 'dead' || gameState === 'won') && !playRequestPending) return;
             resetPlayButton();
+            clearMovementKeys();
+            controls.resetLookInput(100);
             gameState = 'playing';
             gameTimer.reset();
+            lastTrackedPosition.set(camera.position.x, camera.position.z);
             overlayStart.classList.add('hidden');
             settingsPanel.classList.remove('active');
             deathScreen.classList.remove('active');

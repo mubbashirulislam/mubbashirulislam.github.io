@@ -33,6 +33,9 @@ jobs:
       - name: Validate Chased by ALAM assets
         run: node chased-by-alam/verify-assets.cjs
 
+      - name: Run Chased by ALAM regression checks
+        run: node chased-by-alam/regression-check.cjs
+
       - name: Assemble public site
         shell: bash
         run: |
